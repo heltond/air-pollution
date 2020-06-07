@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Railroads and Urban Areas in the United States</title>
+
+  <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/cerulean/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-C++cugH8+Uf86JbNOnQoBweHHAe/wVKN/mb0lTybu/NZ9sEYbd+BbbYtNpWYAsNP" crossorigin="anonymous">
+  <style>
+    #map {
+      width: 100%;
+      height: 40vh;
+    }
+
+    #about {
+      max-height: 80vh;
+      overflow-y: scroll;
+    }
+
+    /* Small devices (landscape phones, 576px and up) */
+    @media (min-width: 576px) {}
+
+    /* Medium devices (tablets, 768px and up) */
+    @media (min-width: 768px) {
+      #map {
+        height: 60vh;
+      }
+    }
+
+    /* Large devices (desktops, 992px and up) */
+    @media (min-width: 992px) {
+
+      #map {
+        height: 80vh;
+      }
+    }
+
+    /* Extra large devices (large desktops, 1200px and up) */
+    @media (min-width: 1200px) {}
+
+    .pollution {
+      fill: green;
+      stroke: black;
+      stroke-width: 1;
+      /* Not standard CSS but works in most browsers! */
+      /* vector-effect: non-scaling-stroke; */
+    }
+
+    .pollution:hover {
+      fill: blue;
+      stroke: black;
+      stroke-width: 1;
+      
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="container-fluid">
+    <header class="row py-3 bg-dark text-white">
+      <div class="col mx-2">
+        <h1 class="h1">The Convergence of Trains and People</h1>
+      </div>
+    </header>
+
+    <section class="row bg-secondary">
+      <div class="col-12 col-md-7 col-lg-8 px-0">
+        <div id="map" class="bg-light position-relative"></div>
+        <div class="form-group mr-3 mt-3" id="dropdown-ui">
+            <select class="form-control bg-primary text-white">
+                <option value="air_pollution_data_Carb">Carbon monoxide</option>
+                <option value="air_pollution_data_Lead">Lead</option>
+                <option value="air_pollution_data_Nitro">Nitrogren dioxide</option>
+                <option value="air_pollution_data_Ozo">Ozone</option>
+                <option value="air_pollution_data_Part">Particulate matter</option>
+                <option value="air_pollution_data_Sulf">Sulfur dioxide</option>
+            </select>
+        </div>
+    
+      </div>
+      <aside id="about" class="col-12 col-md-5 col-lg-4 text-dark py-2">
+        <section>
+          <h2 class="h2 text-dark">About this map</h2>
+          <p>This map shows where railraods and urban areas are in North America, predominantly in the United States, over which the data is presented.
+            Through observation of the map, the user can draw conclusions about the correlation between railroads pathways and urban centers.
+            Almost all urban areas are met by some kind of railroad. Railroads are more frequent and more interconnected in areas with high population density.
+          </p>
+        </section>
+      </aside>
+    </section>
+    <footer class="row bg-dark text-white py-3">
+      <div class="col mx-2">
+        <ul class="list-unstyled">
+          <li>Authored by Daniel Helton</li>
+          <li>5/23/20</li>
+          <li>Data courtesy <a href="https://newmapsplus.as.uky.edu/">New Maps Plus</a>, <a href="geojson.xyz">geojson.xyz</a>, and <a href="https://mapshaper.org/"">Mapshaper</a></li>
+        </ul>
+      </div>
+    </footer>
+  </div> <!-- end .container-fluid -->
+
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+		integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+		crossorigin=""></script>
+
+  <script src="https://d3js.org/d3.v5.js"></script>
+  <script src="https://unpkg.com/topojson@3"></script>
+
+  <script>
+    const mapContainer = d3.select('#map')
+
+    const width = mapContainer.node().offsetWidth - 60;
+    const height = mapContainer.node().offsetHeight - 60;
+
+    const svg = mapContainer
+      .append('svg')
+      .attr('width', width)
+      .attr('height', height)
+      .classed('position-absolute', true)
+      .style('top', 40)
+      .style('left', 30);
+
+    const stateGeoJson = d3.json('data/states.geojson')
+    const countyTopoJson = d3.json('data/counties.topojson')
+    const pollutionTopoJson = d3.json('data/county_pollution.topojson')
+
+    Promise.all([stateGeoJson, countyTopoJson, pollutionTopoJson]).then(drawMap);
+
+    function drawMap(data) {
+
+      const stateData = data[0];
+      const countyData = data[1];
+      const pollutionData = data[2];
+
+      const countyGeoJson = topojson.feature(countyData, {
+        type: 'GeometryCollection',
+        geometries: countyData.objects.counties.geometries
+      });
+
+      const pollutionGeoJson = topojson.feature(pollutionData, {
+        type: 'GeometryCollection',
+        geometries: pollutionData.objects.county_pollution.geometries
+      });
+
+      const projection = d3.geoConicEquidistant()
+        .center([0, 40])
+        .rotate([97, 0])
+        .scale(1300)
+        .translate([width / 2, height / 2]);
+
+      const path = d3.geoPath()
+        .projection(projection);
+
+      const pollution = svg.append('g')
+        .selectAll('path')
+        .data(pollutionGeoJson.features)
+        .join('path')
+        .attr('d', path)
+        .attr('class', 'pollution')
+
+        addUi(pollution);
+    }
+
+    function addUi(pollution) {
+        $('#dropdown-ui select').change(function() {
+          this.value;
+    console.log(`${this.value}`);
+    });
+        updateMap(pollution)
+    }
+
+
+    function updateMap(pollution) {
+
+        const tooltip = d3.select('.container-fluid').append('div')
+        .attr('class', 'my-tooltip bg-warning text-white py-1 px-2 rounded position-absolute invisible');
+
+      mapContainer
+        .on('mousemove', event => {
+          tooltip.style('left', (d3.event.pageX + 10) + 'px')
+            .style('top', (d3.event.pageY - 30) + 'px');
+        });
+        
+        if (`${this.value}` == 'air_pollution_data_Sulf') {
+        pollution.on('click', (d, i, nodes) => {
+        d3.select(nodes[i]).classed('hover', true).raise();
+        tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Sulf} parts per billion`)
+      })
+        .on('mouseout', (d, i, nodes) => {
+          d3.select(nodes[i]).classed('hover', false)
+          tooltip.classed('invisible', true)
+        });
+    }
+    else if (`${this.value}` == 'air_pollution_data_Lead') {
+        pollution.on('click', (d, i, nodes) => {
+        d3.select(nodes[i]).classed('hover', true).raise();
+        tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Lead} micrograms per cubic meter`)
+      })
+        .on('mouseout', (d, i, nodes) => {
+          d3.select(nodes[i]).classed('hover', false)
+          tooltip.classed('invisible', true)
+        });
+    }
+    else if (`${this.value}` == 'air_pollution_data_Nitro') {
+        pollution.on('click', (d, i, nodes) => {
+        d3.select(nodes[i]).classed('hover', true).raise();
+        tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Nitro} parts per billion`)
+      })
+        .on('mouseout', (d, i, nodes) => {
+          d3.select(nodes[i]).classed('hover', false)
+          tooltip.classed('invisible', true)
+        });
+    }
+    else if (`${this.value}` == 'air_pollution_data_Ozo') {
+        pollution.on('click', (d, i, nodes) => {
+        d3.select(nodes[i]).classed('hover', true).raise();
+        tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Ozo} parts per million`)
+      })
+        .on('mouseout', (d, i, nodes) => {
+          d3.select(nodes[i]).classed('hover', false)
+          tooltip.classed('invisible', true)
+        });
+    }
+    else if (`${this.value}` == 'air_pollution_data_Part') {
+        pollution.on('click', (d, i, nodes) => {
+        d3.select(nodes[i]).classed('hover', true).raise();
+        tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Part} micrograms per cubic meter`)
+      })
+        .on('mouseout', (d, i, nodes) => {
+          d3.select(nodes[i]).classed('hover', false)
+          tooltip.classed('invisible', true)
+        });
+    }
+    else {
+        pollution.on('click', (d, i, nodes) => {
+        d3.select(nodes[i]).classed('hover', true).raise();
+        tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Carb} parts per million`)
+      })
+        .on('mouseout', (d, i, nodes) => {
+          d3.select(nodes[i]).classed('hover', false)
+          tooltip.classed('invisible', true)
+        });
+    }
+    }
+
+  </script>
+</body>
+
+</html>

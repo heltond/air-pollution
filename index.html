@@ -5,10 +5,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <title>Railroads and Urban Areas in the United States</title>
+  <title>Air Pollution in the United States</title>
 
-  <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/cerulean/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-C++cugH8+Uf86JbNOnQoBweHHAe/wVKN/mb0lTybu/NZ9sEYbd+BbbYtNpWYAsNP" crossorigin="anonymous">
+  <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.0/cyborg/bootstrap.min.css"
+  rel="stylesheet" integrity="sha384-GKugkVcT8wqoh3M8z1lqHbU+g6j498/ZT/zuXbepz7Dc09/otQZxTimkEMTkRWHP" crossorigin="anonymous">
   <style>
     #map {
       width: 100%;
@@ -42,16 +42,13 @@
     @media (min-width: 1200px) {}
 
     .pollution {
-      fill: green;
+      fill: red;
       stroke: black;
       stroke-width: 1;
-      /* Not standard CSS but works in most browsers! */
-      /* vector-effect: non-scaling-stroke; */
     }
 
     .pollution:hover {
-      fill: blue;
-      stroke: black;
+      stroke: yellow;
       stroke-width: 1;
       
     }
@@ -64,7 +61,7 @@
   <div class="container-fluid">
     <header class="row py-3 bg-dark text-white">
       <div class="col mx-2">
-        <h1 class="h1">The Convergence of Trains and People</h1>
+        <h1 class="h1">The Prevalence of Six Kinds of Air Pollution in the U.S.</h1>
       </div>
     </header>
 
@@ -73,7 +70,7 @@
         <div id="map" class="bg-light position-relative"></div>
         <div class="form-group mr-3 mt-3" id="dropdown-ui">
             <select class="form-control bg-primary text-white">
-                <option value="air_pollution_data_Carb">Carbon monoxide</option>
+                <option value="air_pollution_data_Carb" selected>Carbon monoxide</option>
                 <option value="air_pollution_data_Lead">Lead</option>
                 <option value="air_pollution_data_Nitro">Nitrogren dioxide</option>
                 <option value="air_pollution_data_Ozo">Ozone</option>
@@ -86,9 +83,15 @@
       <aside id="about" class="col-12 col-md-5 col-lg-4 text-dark py-2">
         <section>
           <h2 class="h2 text-dark">About this map</h2>
-          <p>This map shows where railraods and urban areas are in North America, predominantly in the United States, over which the data is presented.
-            Through observation of the map, the user can draw conclusions about the correlation between railroads pathways and urban centers.
-            Almost all urban areas are met by some kind of railroad. Railroads are more frequent and more interconnected in areas with high population density.
+          <p>This map shows counties in the United States and displays where the six major kinds of air pollutants have been recorded, colored by type and severity.
+              <p>So far, the major issue I've encountered is getting the dropdown menu to acknowledge changes in selection. 
+                  Currently, it only displays data for the default option, carbon monoxide. Once this issue is resolved,
+                  I will be better able to create a proper thematic map. Any advice would be appreciated.
+              </p>
+              <p>Another more minor problem is that when the tooltip is set to display on hover, the corresponding hover CSS loads very infrequently.
+                  I don't know if this is a problem with the data or my code; I had the same problem on assignment 6.
+                  For now, I have worked around this issue by making the tooltip appear on click, rather than on hover.
+              </p>
           </p>
         </section>
       </aside>
@@ -97,23 +100,24 @@
       <div class="col mx-2">
         <ul class="list-unstyled">
           <li>Authored by Daniel Helton</li>
-          <li>5/23/20</li>
-          <li>Data courtesy <a href="https://newmapsplus.as.uky.edu/">New Maps Plus</a>, <a href="geojson.xyz">geojson.xyz</a>, and <a href="https://mapshaper.org/"">Mapshaper</a></li>
+          <li>6/4/20</li>
+          <li>Data courtesy <a href="https://newmapsplus.as.uky.edu/">New Maps Plus</a>, <a href="https://aqs.epa.gov/aqsweb/airdata/download_files.html">AirData from the EPA</a>, and <a href="https://mapshaper.org/"">Mapshaper</a></li>
+          <li>Made with HTML, CSS, JavaScript, <a href="https://www.qgis.org/en/site/">QGIS</a>, and <a href="https://getbootstrap.com/">Bootstrap</a></li>
         </ul>
       </div>
     </footer>
-  </div> <!-- end .container-fluid -->
+  </div>
 
 
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-    </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
-    </script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
-    </script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" 
+  integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" 
+  integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+</script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" 
+  integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
+</script>
     <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
 		integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
 		crossorigin=""></script>
@@ -178,12 +182,12 @@
 
     function addUi(pollution) {
         $('#dropdown-ui select').change(function() {
-          this.value;
-    console.log(`${this.value}`);
+          this.value
+    console.log(`${this.value}`)
+        updateMap(pollution);
     });
-        updateMap(pollution)
+    
     }
-
 
     function updateMap(pollution) {
 

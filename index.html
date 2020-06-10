@@ -167,6 +167,9 @@
 
     function drawMap(pollutant, data) {
 
+      // clear existing map
+      svg.selectAll('*').remove()
+
       const stateData = data[0];
       const countyData = data[1];
       const pollutionData = data[2];

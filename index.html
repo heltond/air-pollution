@@ -227,19 +227,7 @@
         })
         // .attr('class', 'pollution')
 
-      addUi(pollution);
-    }
-
-    function addUi(pollution) {
-      $('#dropdown-ui select').change(function () {
-        this.value
-        console.log(`${this.value}`)
-        // updateMap(pollution);
-      });
-
-    }
-
-    function updateMap(pollution) {
+      // addUi(pollution);
 
       const tooltip = d3.select('.container-fluid').append('div')
         .attr('class', 'my-tooltip bg-warning text-white py-1 px-2 rounded position-absolute invisible');
@@ -250,67 +238,97 @@
             .style('top', (d3.event.pageY - 30) + 'px');
         });
 
-      if (`${this.value}` == 'air_pollution_data_Sulf') {
-        pollution.on('click', (d, i, nodes) => {
-          d3.select(nodes[i]).classed('hover', true).raise();
-          tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Sulf} parts per billion`)
-        })
-          .on('mouseout', (d, i, nodes) => {
-            d3.select(nodes[i]).classed('hover', false)
-            tooltip.classed('invisible', true)
-          });
-      }
-      else if (`${this.value}` == 'air_pollution_data_Lead') {
-        pollution.on('click', (d, i, nodes) => {
-          d3.select(nodes[i]).classed('hover', true).raise();
-          tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Lead} micrograms per cubic meter`)
-        })
-          .on('mouseout', (d, i, nodes) => {
-            d3.select(nodes[i]).classed('hover', false)
-            tooltip.classed('invisible', true)
-          });
-      }
-      else if (`${this.value}` == 'air_pollution_data_Nitro') {
-        pollution.on('click', (d, i, nodes) => {
-          d3.select(nodes[i]).classed('hover', true).raise();
-          tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Nitro} parts per billion`)
-        })
-          .on('mouseout', (d, i, nodes) => {
-            d3.select(nodes[i]).classed('hover', false)
-            tooltip.classed('invisible', true)
-          });
-      }
-      else if (`${this.value}` == 'air_pollution_data_Ozo') {
-        pollution.on('click', (d, i, nodes) => {
-          d3.select(nodes[i]).classed('hover', true).raise();
-          tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Ozo} parts per million`)
-        })
-          .on('mouseout', (d, i, nodes) => {
-            d3.select(nodes[i]).classed('hover', false)
-            tooltip.classed('invisible', true)
-          });
-      }
-      else if (`${this.value}` == 'air_pollution_data_Part') {
-        pollution.on('click', (d, i, nodes) => {
-          d3.select(nodes[i]).classed('hover', true).raise();
-          tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Part} micrograms per cubic meter`)
-        })
-          .on('mouseout', (d, i, nodes) => {
-            d3.select(nodes[i]).classed('hover', false)
-            tooltip.classed('invisible', true)
-          });
-      }
-      else {
-        pollution.on('click', (d, i, nodes) => {
-          d3.select(nodes[i]).classed('hover', true).raise();
-          tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Carb} parts per million`)
-        })
-          .on('mouseout', (d, i, nodes) => {
-            d3.select(nodes[i]).classed('hover', false)
-            tooltip.classed('invisible', true)
-          });
-      }
+      pollution.on('mousemove', (d, i, nodes) => {
+        d3.select(nodes[i]).classed('hover', true).raise();
+        tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties[pollutant]} parts per billion`)
+      })
+        .on('mouseout', (d, i, nodes) => {
+          d3.select(nodes[i]).classed('hover', false)
+          tooltip.classed('invisible', true)
+        });
     }
+
+    // function addUi(pollution) {
+    //   $('#dropdown-ui select').change(function () {
+    //     this.value
+    //     console.log(`${this.value}`)
+    //     // updateMap(pollution);
+    //   });
+
+    // }
+
+    // function updateMap(pollution) {
+
+    //   const tooltip = d3.select('.container-fluid').append('div')
+    //     .attr('class', 'my-tooltip bg-warning text-white py-1 px-2 rounded position-absolute invisible');
+
+    //   mapContainer
+    //     .on('mousemove', event => {
+    //       tooltip.style('left', (d3.event.pageX + 10) + 'px')
+    //         .style('top', (d3.event.pageY - 30) + 'px');
+    //     });
+
+    //   if (`${this.value}` == 'air_pollution_data_Sulf') {
+    //     pollution.on('click', (d, i, nodes) => {
+    //       d3.select(nodes[i]).classed('hover', true).raise();
+    //       tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Sulf} parts per billion`)
+    //     })
+    //       .on('mouseout', (d, i, nodes) => {
+    //         d3.select(nodes[i]).classed('hover', false)
+    //         tooltip.classed('invisible', true)
+    //       });
+    //   }
+    //   else if (`${this.value}` == 'air_pollution_data_Lead') {
+    //     pollution.on('click', (d, i, nodes) => {
+    //       d3.select(nodes[i]).classed('hover', true).raise();
+    //       tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Lead} micrograms per cubic meter`)
+    //     })
+    //       .on('mouseout', (d, i, nodes) => {
+    //         d3.select(nodes[i]).classed('hover', false)
+    //         tooltip.classed('invisible', true)
+    //       });
+    //   }
+    //   else if (`${this.value}` == 'air_pollution_data_Nitro') {
+    //     pollution.on('click', (d, i, nodes) => {
+    //       d3.select(nodes[i]).classed('hover', true).raise();
+    //       tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Nitro} parts per billion`)
+    //     })
+    //       .on('mouseout', (d, i, nodes) => {
+    //         d3.select(nodes[i]).classed('hover', false)
+    //         tooltip.classed('invisible', true)
+    //       });
+    //   }
+    //   else if (`${this.value}` == 'air_pollution_data_Ozo') {
+    //     pollution.on('click', (d, i, nodes) => {
+    //       d3.select(nodes[i]).classed('hover', true).raise();
+    //       tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Ozo} parts per million`)
+    //     })
+    //       .on('mouseout', (d, i, nodes) => {
+    //         d3.select(nodes[i]).classed('hover', false)
+    //         tooltip.classed('invisible', true)
+    //       });
+    //   }
+    //   else if (`${this.value}` == 'air_pollution_data_Part') {
+    //     pollution.on('click', (d, i, nodes) => {
+    //       d3.select(nodes[i]).classed('hover', true).raise();
+    //       tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Part} micrograms per cubic meter`)
+    //     })
+    //       .on('mouseout', (d, i, nodes) => {
+    //         d3.select(nodes[i]).classed('hover', false)
+    //         tooltip.classed('invisible', true)
+    //       });
+    //   }
+    //   else {
+    //     pollution.on('click', (d, i, nodes) => {
+    //       d3.select(nodes[i]).classed('hover', true).raise();
+    //       tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Carb} parts per million`)
+    //     })
+    //       .on('mouseout', (d, i, nodes) => {
+    //         d3.select(nodes[i]).classed('hover', false)
+    //         tooltip.classed('invisible', true)
+    //       });
+    //   }
+    // }
 
   </script>
 </body>

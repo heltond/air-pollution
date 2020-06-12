@@ -1,4 +1,4 @@
-GEOID,Latitude,Longitude,State Name,County Name,Carb,Lead,Nitro,Ozo,Part,Sulf
+GEOID,Latitude,Longitude,State_Name,County_Name,air_pollution_data_Carb,air_pollution_data_Lead,air_pollution_data_Nitro,air_pollution_data_Ozo,air_pollution_data_Part,air_pollution_data_Sulf
 "01003","30.497477999999997","-87.880258",Alabama,Baldwin,,,,0.04151925,7.551402,
 "01027","33.284928","-85.803608",Alabama,Clay,,,,,7.550467,
 "01033","34.762619","-87.638097",Alabama,Colbert,,,,0.03946575,7.213235,

@@ -7,8 +7,8 @@
 
   <title>Air Pollution in the United States</title>
 
-  <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.0/cyborg/bootstrap.min.css"
-  rel="stylesheet" integrity="sha384-GKugkVcT8wqoh3M8z1lqHbU+g6j498/ZT/zuXbepz7Dc09/otQZxTimkEMTkRWHP" crossorigin="anonymous">
+  <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.0/cyborg/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GKugkVcT8wqoh3M8z1lqHbU+g6j498/ZT/zuXbepz7Dc09/otQZxTimkEMTkRWHP" crossorigin="anonymous">
   <style>
     #map {
       width: 100%;
@@ -50,7 +50,7 @@
     .pollution:hover {
       stroke: yellow;
       stroke-width: 1;
-      
+
     }
   </style>
 
@@ -68,30 +68,33 @@
     <section class="row bg-secondary">
       <div class="col-12 col-md-7 col-lg-8 px-0">
         <div id="map" class="bg-light position-relative"></div>
+        <canvas id="legend" width=200 height=200></canvas>
         <div class="form-group mr-3 mt-3" id="dropdown-ui">
-            <select class="form-control bg-primary text-white">
-                <option value="air_pollution_data_Carb" selected>Carbon monoxide</option>
-                <option value="air_pollution_data_Lead">Lead</option>
-                <option value="air_pollution_data_Nitro">Nitrogren dioxide</option>
-                <option value="air_pollution_data_Ozo">Ozone</option>
-                <option value="air_pollution_data_Part">Particulate matter</option>
-                <option value="air_pollution_data_Sulf">Sulfur dioxide</option>
-            </select>
+          <select class="form-control bg-primary text-white">
+            <option value="air_pollution_data_Carb" selected>Carbon monoxide</option>
+            <option value="air_pollution_data_Lead">Lead</option>
+            <option value="air_pollution_data_Nitro">Nitrogren dioxide</option>
+            <option value="air_pollution_data_Ozo">Ozone</option>
+            <option value="air_pollution_data_Part">Particulate matter</option>
+            <option value="air_pollution_data_Sulf">Sulfur dioxide</option>
+          </select>
         </div>
-    
+
       </div>
       <aside id="about" class="col-12 col-md-5 col-lg-4 text-dark py-2">
         <section>
           <h2 class="h2 text-dark">About this map</h2>
-          <p>This map shows counties in the United States and displays where the six major kinds of air pollutants have been recorded, colored by type and severity.
-              <p>So far, the major issue I've encountered is getting the dropdown menu to acknowledge changes in selection. 
-                  Currently, it only displays data for the default option, carbon monoxide. Once this issue is resolved,
-                  I will be better able to create a proper thematic map. Any advice would be appreciated.
-              </p>
-              <p>Another more minor problem is that when the tooltip is set to display on hover, the corresponding hover CSS loads very infrequently.
-                  I don't know if this is a problem with the data or my code; I had the same problem on assignment 6.
-                  For now, I have worked around this issue by making the tooltip appear on click, rather than on hover.
-              </p>
+          <p>This map shows counties in the United States and displays where the six major kinds of air pollutants have
+            been recorded, colored by type and severity.
+          <p>So far, the major issue I've encountered is getting the dropdown menu to acknowledge changes in selection.
+            Currently, it only displays data for the default option, carbon monoxide. Once this issue is resolved,
+            I will be better able to create a proper thematic map. Any advice would be appreciated.
+          </p>
+          <p>Another more minor problem is that when the tooltip is set to display on hover, the corresponding hover CSS
+            loads very infrequently.
+            I don't know if this is a problem with the data or my code; I had the same problem on assignment 6.
+            For now, I have worked around this issue by making the tooltip appear on click, rather than on hover.
+          </p>
           </p>
         </section>
       </aside>
@@ -101,31 +104,38 @@
         <ul class="list-unstyled">
           <li>Authored by Daniel Helton</li>
           <li>6/4/20</li>
-          <li>Data courtesy <a href="https://newmapsplus.as.uky.edu/">New Maps Plus</a>, <a href="https://aqs.epa.gov/aqsweb/airdata/download_files.html">AirData from the EPA</a>, and <a href="https://mapshaper.org/"">Mapshaper</a></li>
-          <li>Made with HTML, CSS, JavaScript, <a href="https://www.qgis.org/en/site/">QGIS</a>, and <a href="https://getbootstrap.com/">Bootstrap</a></li>
+          <li>Data courtesy <a href="https://newmapsplus.as.uky.edu/">New Maps Plus</a>, <a
+              href="https://aqs.epa.gov/aqsweb/airdata/download_files.html">AirData from the EPA</a>, and <a
+              href="https://mapshaper.org/"">Mapshaper</a></li>
+          <li>Made with HTML, CSS, JavaScript, <a href=" https://www.qgis.org/en/site/">QGIS</a>, and <a
+              href="https://getbootstrap.com/">Bootstrap</a></li>
         </ul>
       </div>
     </footer>
   </div>
 
 
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" 
-  integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
-</script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" 
-  integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
-</script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" 
-  integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
-</script>
-    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
-		integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
-		crossorigin=""></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+    </script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+    </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
+    </script>
+  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+    crossorigin=""></script>
 
   <script src="https://d3js.org/d3.v5.js"></script>
   <script src="https://unpkg.com/topojson@3"></script>
+  <script   src='js/color-legend.js'></script>
+
+  
 
   <script>
+    
     const mapContainer = d3.select('#map')
 
     const width = mapContainer.node().offsetWidth - 60;
@@ -143,9 +153,22 @@
     const countyTopoJson = d3.json('data/counties.topojson')
     const pollutionTopoJson = d3.json('data/county_pollution.topojson')
 
-    Promise.all([stateGeoJson, countyTopoJson, pollutionTopoJson]).then(drawMap);
+    Promise.all([stateGeoJson, countyTopoJson, pollutionTopoJson]).then(getData);
 
-    function drawMap(data) {
+    // accepts the data as a parameter countiesData (??? How did you derive at this -- countiesData ???)
+    function getData(data) {
+
+      d3.select('#dropdown-ui select').on('change', function () {
+        drawMap(this.value, data)
+      });
+      
+      drawMap('air_pollution_data_Carb', data)
+    }
+
+    function drawMap(pollutant, data) {
+
+      // clear existing map
+      svg.selectAll('*').remove()
 
       const stateData = data[0];
       const countyData = data[1];
@@ -161,6 +184,32 @@
         geometries: pollutionData.objects.county_pollution.geometries
       });
 
+      // Use D3 legend function: https://observablehq.com/@d3/color-legend
+      // get all values for variable, push them in an array
+      const myArray = []
+      for (let x of pollutionGeoJson.features) {
+        myArray.push(+x.properties[pollutant])
+      }
+
+      // find the highest and lowest values
+      const max = d3.max(myArray)
+      const min = d3.min(myArray)
+      console.log(myArray, min, max)
+
+      // create color function for classification method and color scheme
+      const color = d3.scaleQuantize([min, max], d3.schemePurples[9])
+
+      // Add legend to map
+      svg.append("g")
+        .attr("transform", "translate(0,50)")
+        .append(() => legend({
+          color,
+          width: 260,
+          title: pollutant,
+          tickSize: 10,
+          tickFormat: ".1f",
+        }));
+
       const projection = d3.geoConicEquidistant()
         .center([0, 40])
         .rotate([97, 0])
@@ -175,23 +224,15 @@
         .data(pollutionGeoJson.features)
         .join('path')
         .attr('d', path)
-        .attr('class', 'pollution')
+        .attr("fill", d => {
+          console.log
+          return color(d.properties[pollutant]); // color individual polygons
+        })
+        // .attr('class', 'pollution')
 
-        addUi(pollution);
-    }
+      // addUi(pollution);
 
-    function addUi(pollution) {
-        $('#dropdown-ui select').change(function() {
-          this.value
-    console.log(`${this.value}`)
-        updateMap(pollution);
-    });
-    
-    }
-
-    function updateMap(pollution) {
-
-        const tooltip = d3.select('.container-fluid').append('div')
+      const tooltip = d3.select('.container-fluid').append('div')
         .attr('class', 'my-tooltip bg-warning text-white py-1 px-2 rounded position-absolute invisible');
 
       mapContainer
@@ -199,68 +240,98 @@
           tooltip.style('left', (d3.event.pageX + 10) + 'px')
             .style('top', (d3.event.pageY - 30) + 'px');
         });
-        
-        if (`${this.value}` == 'air_pollution_data_Sulf') {
-        pollution.on('click', (d, i, nodes) => {
+
+      pollution.on('mousemove', (d, i, nodes) => {
         d3.select(nodes[i]).classed('hover', true).raise();
-        tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Sulf} parts per billion`)
+        tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties[pollutant]} parts per billion`)
       })
         .on('mouseout', (d, i, nodes) => {
           d3.select(nodes[i]).classed('hover', false)
           tooltip.classed('invisible', true)
         });
     }
-    else if (`${this.value}` == 'air_pollution_data_Lead') {
-        pollution.on('click', (d, i, nodes) => {
-        d3.select(nodes[i]).classed('hover', true).raise();
-        tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Lead} micrograms per cubic meter`)
-      })
-        .on('mouseout', (d, i, nodes) => {
-          d3.select(nodes[i]).classed('hover', false)
-          tooltip.classed('invisible', true)
-        });
-    }
-    else if (`${this.value}` == 'air_pollution_data_Nitro') {
-        pollution.on('click', (d, i, nodes) => {
-        d3.select(nodes[i]).classed('hover', true).raise();
-        tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Nitro} parts per billion`)
-      })
-        .on('mouseout', (d, i, nodes) => {
-          d3.select(nodes[i]).classed('hover', false)
-          tooltip.classed('invisible', true)
-        });
-    }
-    else if (`${this.value}` == 'air_pollution_data_Ozo') {
-        pollution.on('click', (d, i, nodes) => {
-        d3.select(nodes[i]).classed('hover', true).raise();
-        tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Ozo} parts per million`)
-      })
-        .on('mouseout', (d, i, nodes) => {
-          d3.select(nodes[i]).classed('hover', false)
-          tooltip.classed('invisible', true)
-        });
-    }
-    else if (`${this.value}` == 'air_pollution_data_Part') {
-        pollution.on('click', (d, i, nodes) => {
-        d3.select(nodes[i]).classed('hover', true).raise();
-        tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Part} micrograms per cubic meter`)
-      })
-        .on('mouseout', (d, i, nodes) => {
-          d3.select(nodes[i]).classed('hover', false)
-          tooltip.classed('invisible', true)
-        });
-    }
-    else {
-        pollution.on('click', (d, i, nodes) => {
-        d3.select(nodes[i]).classed('hover', true).raise();
-        tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Carb} parts per million`)
-      })
-        .on('mouseout', (d, i, nodes) => {
-          d3.select(nodes[i]).classed('hover', false)
-          tooltip.classed('invisible', true)
-        });
-    }
-    }
+
+    // function addUi(pollution) {
+    //   $('#dropdown-ui select').change(function () {
+    //     this.value
+    //     console.log(`${this.value}`)
+    //     // updateMap(pollution);
+    //   });
+
+    // }
+
+    // function updateMap(pollution) {
+
+    //   const tooltip = d3.select('.container-fluid').append('div')
+    //     .attr('class', 'my-tooltip bg-warning text-white py-1 px-2 rounded position-absolute invisible');
+
+    //   mapContainer
+    //     .on('mousemove', event => {
+    //       tooltip.style('left', (d3.event.pageX + 10) + 'px')
+    //         .style('top', (d3.event.pageY - 30) + 'px');
+    //     });
+
+    //   if (`${this.value}` == 'air_pollution_data_Sulf') {
+    //     pollution.on('click', (d, i, nodes) => {
+    //       d3.select(nodes[i]).classed('hover', true).raise();
+    //       tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Sulf} parts per billion`)
+    //     })
+    //       .on('mouseout', (d, i, nodes) => {
+    //         d3.select(nodes[i]).classed('hover', false)
+    //         tooltip.classed('invisible', true)
+    //       });
+    //   }
+    //   else if (`${this.value}` == 'air_pollution_data_Lead') {
+    //     pollution.on('click', (d, i, nodes) => {
+    //       d3.select(nodes[i]).classed('hover', true).raise();
+    //       tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Lead} micrograms per cubic meter`)
+    //     })
+    //       .on('mouseout', (d, i, nodes) => {
+    //         d3.select(nodes[i]).classed('hover', false)
+    //         tooltip.classed('invisible', true)
+    //       });
+    //   }
+    //   else if (`${this.value}` == 'air_pollution_data_Nitro') {
+    //     pollution.on('click', (d, i, nodes) => {
+    //       d3.select(nodes[i]).classed('hover', true).raise();
+    //       tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Nitro} parts per billion`)
+    //     })
+    //       .on('mouseout', (d, i, nodes) => {
+    //         d3.select(nodes[i]).classed('hover', false)
+    //         tooltip.classed('invisible', true)
+    //       });
+    //   }
+    //   else if (`${this.value}` == 'air_pollution_data_Ozo') {
+    //     pollution.on('click', (d, i, nodes) => {
+    //       d3.select(nodes[i]).classed('hover', true).raise();
+    //       tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Ozo} parts per million`)
+    //     })
+    //       .on('mouseout', (d, i, nodes) => {
+    //         d3.select(nodes[i]).classed('hover', false)
+    //         tooltip.classed('invisible', true)
+    //       });
+    //   }
+    //   else if (`${this.value}` == 'air_pollution_data_Part') {
+    //     pollution.on('click', (d, i, nodes) => {
+    //       d3.select(nodes[i]).classed('hover', true).raise();
+    //       tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Part} micrograms per cubic meter`)
+    //     })
+    //       .on('mouseout', (d, i, nodes) => {
+    //         d3.select(nodes[i]).classed('hover', false)
+    //         tooltip.classed('invisible', true)
+    //       });
+    //   }
+    //   else {
+    //     pollution.on('click', (d, i, nodes) => {
+    //       d3.select(nodes[i]).classed('hover', true).raise();
+    //       tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties.air_pollution_data_Carb} parts per million`)
+    //     })
+    //       .on('mouseout', (d, i, nodes) => {
+    //         d3.select(nodes[i]).classed('hover', false)
+    //         tooltip.classed('invisible', true)
+    //       });
+    //   }
+    // }
 
   </script>
 </body>

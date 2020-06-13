@@ -1,6 +1,8 @@
 (function () {
 
-    const pollutionGeoJson = d3.json('data/air_pollution_data.geojson')
+    const array = []
+
+    const pollutionGeoJson = d3.csv('data/air_pollution_data.csv')
     const countyTopoJson = d3.json('data/counties.topojson')
 
     Promise.all([pollutionGeoJson, countyTopoJson]).then(getData);
@@ -39,15 +41,16 @@
             geometries: countyData.objects.counties.geometries
         });
 
+        const radius = d3.scaleSqrt().domain([0, 1e6]).range([1, 9]);
+
         const myArray = []
-        for (let x of pollutionData.features) {
-            myArray.push(+x.properties[pollutant])
+        for (let x of pollutionData) {
+            myArray.push(+x[pollutant])
         }
 
         const max = d3.max(myArray)
         const min = d3.min(myArray)
-
-        const radius = d3.scaleSqrt().domain([0, 1e6]).range([1, 9]);
+        console.log(myArray, min, max)
 
         const color = d3.scaleQuantize([min, max], d3.schemePurples[9])
 
@@ -68,14 +71,21 @@
             .attr('class', 'county');
 
             const pollution = svg.append('g')
-            .selectAll('path')
-            .data(pollutionData.features)
-            .enter()
-            .append('path')
-            .attr("fill", d => {
-                return color(d.properties[pollutant]);
+            .selectAll('circle')
+            .data(pollutionData)
+            .join('circle')
+            .attr('cx', d => {
+              d.position = projection([d.Longitude, d.Latitude]);
+              return d.position[0];
             })
-            .attr('d', path.pointRadius(5));
+            .attr('cy', d => {
+              return d.position[1];
+            })
+            .attr('r',  8)
+            .attr('class', 'pollution')
+            .style('fill',  d => {
+                return color(d[pollutant]);
+              });
             
             // .attr('d', path.pointRadius([function (d) {
             //    return radius(d.properties[pollutant]);
@@ -92,7 +102,7 @@
 
         pollution.on('mousemove', (d, i, nodes) => {
             d3.select(nodes[i]).classed('hover', true).raise();
-            tooltip.classed('invisible', false).html(`${d.properties.County_Name} County<br>${d.properties[pollutant]} parts per billion`)
+            tooltip.classed('invisible', false).html(`${d.County_Name} County<br>${d[pollutant]} parts per billion`)
         })
             .on('mouseout', (d, i, nodes) => {
                 d3.select(nodes[i]).classed('hover', false)

@@ -42,8 +42,8 @@
     @media (min-width: 1200px) {}
 
     .county {
-  fill: white;
-  stroke: black;
+      fill: white;
+      stroke: black;
       stroke-width: 1;
     }
 
@@ -54,13 +54,13 @@
     }
 
     .pollution {
-    
-  opacity: 1;
-}
 
-.pollution:hover {
-  stroke-width: 2;
-}
+      opacity: 1;
+    }
+
+    .pollution:hover {
+      stroke-width: 2;
+    }
 
     .legend circle {
       fill: none;
@@ -89,6 +89,12 @@
       <div class="col-12 col-md-7 col-lg-8 px-0">
         <div id="map" class="bg-light position-relative"></div>
         <canvas id="legend" width=200 height=200></canvas>
+        <div class="form-group mr-3 mt-3" id="dropdown-tm">
+          <select class="form-control bg-primary text-white">
+            <option value="county_select">Counties</option>
+            <option value="point_select">Points</option>
+          </select>
+        </div>
         <div class="form-group mr-3 mt-3" id="dropdown-ui">
           <select class="form-control bg-primary text-white">
             <option value="air_pollution_data_Carb" selected>Carbon monoxide</option>
@@ -142,11 +148,7 @@
   <script src="https://d3js.org/d3.v5.js"></script>
   <script src="https://unpkg.com/topojson@3"></script>
   <script src='js/color-legend.js'></script>
-  <!-- <script src='js/county.js'></script> -->
-  <script src='js/point.js'></script>
-
-  
-
+  <script src='js/county.js'></script>
 
 </body>
 

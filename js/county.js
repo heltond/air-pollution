@@ -13,9 +13,10 @@
         .style('top', 40)
         .style('left', 30);
 
+        countyMap();
+
     var choice = d3.select('#dropdown-tm select').on('change', function () {
         this.value
-        console.log(this.value)
         var selection = this.value
 
         if (selection == 'county_select') {
@@ -46,6 +47,7 @@
         function getData(data) {
 
             d3.select('#dropdown-ui select').on('change', function () {
+                svg.selectAll('*').remove()
                 drawMap(this.value, data)
             });
 
@@ -70,22 +72,36 @@
 
             const myArray = []
             for (let x of pollutionGeoJson.features) {
+                if (x.properties[pollutant] > 0) {
                 myArray.push(+x.properties[pollutant])
+                }
             }
 
             const max = d3.max(myArray)
             const min = d3.min(myArray)
 
-            const color = d3.scaleQuantize([min, max], d3.schemePurples[9])
+            const wheel = ['#E6E6FA', '#DDA0DD', '#FF00FF', '#9400D3', '#4B0082']
+
+            const color = d3.scaleQuantile().domain(myArray).range(wheel)
+
+            if (pollutant == 'air_pollution_data_Carb' || pollutant == 'air_pollution_data_Ozo') {
+                var measure = 'parts per million';
+            }
+            else if (pollutant == 'air_pollution_data_Lead' || pollutant == 'air_pollution_data_Part') {
+                var measure = 'micrograms/cubic meter'
+            }
+            else {
+                var measure = 'parts per billion'
+            }
 
             svg.append("g")
                 .attr("transform", "translate(0,50)")
                 .append(() => legend({
                     color,
                     width: 260,
-                    title: 'Parts per billion',
+                    title: `${measure}`,
                     tickSize: 10,
-                    tickFormat: ".1f",
+                    tickFormat: ".2f",
                 }));
 
             const projection = d3.geoConicEquidistant()
@@ -103,9 +119,14 @@
                 .join('path')
                 .attr('d', path)
                 .attr("fill", d => {
-                    console.log
+                    if ((d.properties[pollutant]) > 0) {
                     return color(d.properties[pollutant]);
+                    }
+                    else {
+                        return 'white'
+                    }
                 })
+                .attr('stroke', 'black');
 
             const tooltip = d3.select('.container-fluid').append('div')
                 .attr('class', 'my-tooltip bg-warning text-white py-1 px-2 rounded position-absolute invisible');
@@ -118,7 +139,9 @@
 
             pollution.on('mousemove', (d, i, nodes) => {
                 d3.select(nodes[i]).classed('hover', true).raise();
-                tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties[pollutant]} parts per billion`)
+                if (d.properties[pollutant] > 0) {
+                tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties[pollutant]} ${measure}`)
+                }
             })
                 .on('mouseout', (d, i, nodes) => {
                     d3.select(nodes[i]).classed('hover', false)
@@ -136,6 +159,7 @@
         function getData(data) {
 
             d3.select('#dropdown-ui select').on('change', function () {
+                svg.selectAll('*').remove()
                 drawMap(this.value, data)
             });
 
@@ -143,7 +167,6 @@
         }
 
         function drawMap(pollutant, data) {
-
 
             const pollutionData = data[0];
             const countyData = data[1];
@@ -153,19 +176,41 @@
                 geometries: countyData.objects.counties.geometries
             });
 
-
-
             const myArray = []
             for (let x of pollutionData) {
+                if (x[pollutant] > 0) {
                 myArray.push(+x[pollutant])
+                }
             }
 
             const max = d3.max(myArray)
             const min = d3.min(myArray)
 
-            const radius = d3.scaleSqrt().domain([min, max]).range([1, 20]);
+            const radius = d3.scaleSqrt().domain([0.000000000000001, max]).range([3, 20]);
 
-            const color = d3.scaleQuantize([min, max], d3.schemePurples[9])
+            const wheel = ['#E6E6FA', '#DDA0DD', '#FF00FF', '#9400D3', '#4B0082']
+
+            const color = d3.scaleQuantile().domain(myArray).range(wheel)
+
+            if (pollutant == 'air_pollution_data_Carb' || pollutant == 'air_pollution_data_Ozo') {
+                var measure = 'parts per million';
+            }
+            else if (pollutant == 'air_pollution_data_Lead' || pollutant == 'air_pollution_data_Part') {
+                var measure = 'micrograms/cubic meter'
+            }
+            else {
+                var measure = 'parts per billion'
+            }
+
+            svg.append("g")
+                .attr("transform", "translate(0,50)")
+                .append(() => legend({
+                    color,
+                    width: 260,
+                    title: `${measure}`,
+                    tickSize: 10,
+                    tickFormat: ".2f",
+                }));
 
             const projection = d3.geoConicEquidistant()
                 .center([0, 40])
@@ -185,7 +230,9 @@
 
             const pollution = svg.append('g')
                 .selectAll('circle')
-                .data(pollutionData)
+                .data(pollutionData.sort(function (a, b) {
+                    return b[pollutant] - a[pollutant];
+                }))
                 .join('circle')
                 .attr('cx', d => {
                     d.position = projection([d.Longitude, d.Latitude]);
@@ -199,7 +246,20 @@
                 })
                 .attr('class', 'pollution')
                 .style('fill', d => {
-                    return color(d[pollutant]);
+                    if (d[pollutant] > 0) {
+                        return color(d[pollutant]);
+                    }
+                    else {
+                        return 'none';
+                    }
+                })
+                .style('stroke', d => {
+                    if (d[pollutant] > 0) {
+                        return 'black';
+                    }
+                    else {
+                        return 'none';
+                    }
                 });
 
             const tooltip = d3.select('.container-fluid').append('div')
@@ -212,43 +272,40 @@
                 });
 
             pollution.on('mousemove', (d, i, nodes) => {
-                d3.select(nodes[i]).classed('hover', true).raise();
-                tooltip.classed('invisible', false).html(`${d.County_Name} County<br>${d[pollutant]} parts per billion`)
+                d3.select(nodes[i]).classed('hover', true);
+                tooltip.classed('invisible', false).html(`${d.County_Name} County, ${d.State_Name}<br>${d[pollutant]} ${measure}`)
             })
                 .on('mouseout', (d, i, nodes) => {
-                    d3.select(nodes[i]).classed('hover', false)
+                    d3.select(nodes[i]).classed('hover', false);
                     tooltip.classed('invisible', true)
                 });
 
-            drawLegend(svg, width, height, radius)
+            //  const circLegend = svg.append('g')
+            //    .attr('dy', '1.3em')
+            //    .attr('class', 'legend')
+            //    .attr('transform', 'translate(' + (width - 40) + ',' + (height - 20) + ')')
+            //    .selectAll('g')
+            //    .data([5e6, 2e7])
+            //    .join('g');
+            //
+            //   circLegend.append('circle')
+            //    .attr('cy', d => {
+            //       return -radius(d);
+            //      })
+            //    .attr('r', radius);
+            //
+            //    circLegend.append('text')
+            //     .attr('y', d => {
+            //       return -2 * radius(d);
+            //       })
+            //     .attr('dy', '1.3em')
+            //     .text(d3.format('.1s'));
+            //
+            //    circLegend.append('text')
+            //      .attr('y', 16)
+            //      .text(`${measure}`);
+
         }
 
-        function drawLegend(svg, width, height, radius) {
-
-            const legend = svg.append('g')
-                .attr('dy', '1.3em')
-                .attr('class', 'legend')
-                .attr('transform', 'translate(' + (width - 40) + ',' + (height - 20) + ')')
-                .selectAll('g')
-                .data([5e6, 2e7])
-                .join('g');
-
-            legend.append('circle')
-                .attr('cy', d => {
-                    return -radius(d);
-                })
-                .attr('r', radius);
-
-            legend.append('text')
-                .attr('y', d => {
-                    return -2 * radius(d);
-                })
-                .attr('dy', '1.3em')
-                .text(d3.format('.1s'));
-
-            legend.append('text')
-                .attr('y', 16)
-                .text('metric tons');
-        }
     }
 })();

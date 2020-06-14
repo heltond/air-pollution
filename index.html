@@ -11,22 +11,55 @@
     integrity="sha384-GKugkVcT8wqoh3M8z1lqHbU+g6j498/ZT/zuXbepz7Dc09/otQZxTimkEMTkRWHP" crossorigin="anonymous">
   <style>
     #map {
-      width: 100%;
+      width: 175vh;
       height: 40vh;
     }
 
     #about {
-      max-height: 80vh;
-      overflow-y: scroll;
+      max-height: 40vh;
+      max-width: 40vh;
+      position: relative;
+      right: 119vh;
+      top: 15vh;
+      visibility: hidden;
+    }
+
+    #attribution {
+      visibility: hidden;
+    }
+
+    #dropdown-tm {
+      position: fixed;
+      top: 10vh;
+      right: 2vh;
+    }
+
+    #dropdown-ui {
+      position: fixed;
+      top: 15vh;
+      right: 2vh;
     }
 
     /* Small devices (landscape phones, 576px and up) */
-    @media (min-width: 576px) {}
+    @media (min-width: 576px) {
+      #about {
+        visibility: hidden;
+      }
+      #attribution {
+        visibility: hidden;
+      }
+    }
 
     /* Medium devices (tablets, 768px and up) */
     @media (min-width: 768px) {
       #map {
         height: 60vh;
+      }
+      #about {
+        visibility: hidden;
+      }
+      #attribution {
+        visibility: visible;
       }
     }
 
@@ -36,10 +69,23 @@
       #map {
         height: 80vh;
       }
+      #about {
+        visibility: visible;
+      }
+      #attribution {
+        visibility: visible;
+      }
     }
 
     /* Extra large devices (large desktops, 1200px and up) */
-    @media (min-width: 1200px) {}
+    @media (min-width: 1200px) {
+      #about {
+        visibility: visible;
+      }
+      #attribution {
+        visibility: visible;
+      }
+    }
 
     .county {
       fill: white;
@@ -47,14 +93,7 @@
       stroke-width: 1;
     }
 
-    .county:hover {
-      stroke: yellow;
-      stroke-width: 1;
-
-    }
-
     .pollution {
-
       opacity: 1;
     }
 
@@ -81,17 +120,17 @@
   <div class="container-fluid">
     <header class="row py-3 bg-dark text-white">
       <div class="col mx-2">
-        <h1 class="h1">The Prevalence of Six Kinds of Air Pollution in the U.S.</h1>
+        <h2 class="h2">The Prevalence of the Six Major Kinds of Air Pollution in the U.S.</h1>
       </div>
     </header>
 
     <section class="row bg-secondary">
       <div class="col-12 col-md-7 col-lg-8 px-0">
         <div id="map" class="bg-light position-relative"></div>
-        <canvas id="legend" width=200 height=200></canvas>
+        <canvas id="legend" width=5 height=5></canvas>
         <div class="form-group mr-3 mt-3" id="dropdown-tm">
           <select class="form-control bg-primary text-white">
-            <option value="county_select">Counties</option>
+            <option value="county_select" selected>Counties</option>
             <option value="point_select">Points</option>
           </select>
         </div>
@@ -110,13 +149,27 @@
       <aside id="about" class="col-12 col-md-5 col-lg-4 text-dark py-2">
         <section>
           <h2 class="h2 text-dark">About this map</h2>
-          <p>This map shows counties in the United States and displays where the six major kinds of air pollutants have
-            been recorded, colored by type and severity.
+          <p>
+            The Environmental Protection Agency describes six common air pollutants as "criteria pollutants." These criteria pollutants are carbon monoxide, 
+            lead, nitrogen dioxide, ozone, particulate matter, and sulfur dioxide. The EPA sets standards and regulations for these pollutants under the
+            Clean Air Act.
+          </p>
+          <p>
+            The EPA's AirData database provides information that the agency has collected on the presence of criteria pollutants at monitoring sites.
+            This data has been incorporated into this map to visualize where criteria pollutants have been found in the United States, and to what extent.
+          </p>
+          <p>
+            The first dropdown menu in the top right can be used to see polygonal data by county or point data by individual monitoring site. The second
+            filters the data by criteria pollutant. For both maps, colors darken where air pollution is more prevalent. For the point map, the points also
+            increase in size.
+          </p>
+          <p>
+            By hovering over a county or point, a popup appears to name the location and specify the exact value of pollution discovered.
           </p>
         </section>
       </aside>
     </section>
-    <footer class="row bg-dark text-white py-3">
+    <footer class="row bg-dark text-white py-3" id="attribution">
       <div class="col mx-2">
         <ul class="list-unstyled">
           <li>Authored by Daniel Helton</li>

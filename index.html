@@ -50,9 +50,9 @@
 
     /* Small devices (landscape phones, 576px and up) */
     @media (min-width: 576px) {
-      #about {
+      /* #about {
         visibility: hidden;
-      }
+      } */
       #attribution {
         visibility: hidden;
       }
@@ -63,9 +63,9 @@
       #map {
         height: 60vh;
       }
-      #about {
+      /* #about {
         visibility: hidden;
-      }
+      } */
       #attribution {
         visibility: visible;
       }
@@ -77,9 +77,9 @@
       #map {
         height: 80vh;
       }
-      #about {
+      /* #about {
         visibility: hidden;
-      }
+      } */
       #attribution {
         visibility: visible;
       }
@@ -133,28 +133,13 @@
     </header>
 
     <section class="row bg-secondary">
-      <div class="col-12 col-md-7 col-lg-8 px-0">
-        <div id="map" class="bg-light position-relative"></div>
-        <canvas id="legend" width=5 height=5></canvas>
-        <div class="form-group mr-3 mt-3" id="dropdown-tm">
-          <select class="form-control bg-primary text-white">
-            <option value="county_select" selected>Counties</option>
-            <option value="point_select">Points</option>
-          </select>
-        </div>
-        <div class="form-group mr-3 mt-3" id="dropdown-ui">
-          <select class="form-control bg-primary text-white">
-            <option value="air_pollution_data_Carb" selected>Carbon monoxide</option>
-            <option value="air_pollution_data_Lead">Lead</option>
-            <option value="air_pollution_data_Nitro">Nitrogren dioxide</option>
-            <option value="air_pollution_data_Ozo">Ozone</option>
-            <option value="air_pollution_data_Part">Particulate matter</option>
-            <option value="air_pollution_data_Sulf">Sulfur dioxide</option>
-          </select>
-        </div>
+      <div id="map" class="bg-light position-relative col-12 col-lg-8"></div>
+      <!-- <div class="col-12 col-md-7 col-lg-8 px-0">
+       
+        Where the dropdowns went
 
-      </div>
-      <aside id="about" class="col-12 col-md-5 col-lg-4 text-dark py-2">
+      </div> -->
+      <aside id="" class="col-12 col-lg-4 text-dark py-2">
         <section>
           <h2 class="h2 text-dark">About this map</h2>
           <p>
@@ -190,6 +175,25 @@
         </ul>
       </div>
     </footer>
+  </div>
+
+  
+  <!-- <canvas id="legend" width=5 height=5></canvas> -->
+  <div class="form-group mr-3 mt-3" id="dropdown-tm">
+    <select class="form-control bg-primary text-white">
+      <option value="county_select" selected>Counties</option>
+      <option value="point_select">Points</option>
+    </select>
+  </div>
+  <div class="form-group mr-3 mt-3" id="dropdown-ui">
+    <select class="form-control bg-primary text-white">
+      <option value="air_pollution_data_Carb" selected>Carbon monoxide</option>
+      <option value="air_pollution_data_Lead">Lead</option>
+      <option value="air_pollution_data_Nitro">Nitrogren dioxide</option>
+      <option value="air_pollution_data_Ozo">Ozone</option>
+      <option value="air_pollution_data_Part">Particulate matter</option>
+      <option value="air_pollution_data_Sulf">Sulfur dioxide</option>
+    </select>
   </div>
 
 

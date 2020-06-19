@@ -83,9 +83,21 @@
 
         Promise.all([stateGeoJson, countyTopoJson, pollutionTopoJson]).then(getData);
 
-        function getData(data) {
+         // When the browser resizes...
+         window.addEventListener('resize', () => {
 
-            
+            // remove existing SVG
+            svg.selectAll("*").remove();
+
+            // use promise to call all data files, then send data to callback
+            Promise.all([stateGeoJson, countyTopoJson, pollutionTopoJson])
+            .then(getData)
+            .catch(error => {
+                console.log(error)
+            });
+        });
+
+        function getData(data) {
 
             d3.select('#dropdown-ui select').on('change', function () {
                 svg.selectAll('*').remove()

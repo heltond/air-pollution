@@ -2,8 +2,8 @@
 
     const legendContainer = d3.select('#map')
 
-    const width = legendContainer.node().offsetWidth - 60;
-    const height = legendContainer.node().offsetHeight - 60;
+    const width = legendContainer.node().offsetWidth - 10;
+    const height = legendContainer.node().offsetHeight - 10;
 
 
     const svgLegend = legendContainer
@@ -11,8 +11,8 @@
         .attr('width', width)
         .attr('height', height)
         .classed('position-absolute', true)
-        .style('top', 40)
-        .style('left', 30);
+        .style('top', '10px')
+        .style('left', '30px');
 
 
     const mapContainer = d3.select('#map')
@@ -22,8 +22,37 @@
         .attr('width', width)
         .attr('height', height)
         .classed('position-absolute', true)
-        .style('top', 40)
-        .style('left', 30);
+        .style('top', '5px')
+        .style('left', '5px');
+
+    const mapUiContainer = d3.select('#map')
+
+    const mapUi = mapUiContainer
+        .append('div')
+        .attr('width', width)
+        .attr('height', height)
+        .classed('position-absolute', true)
+        .style('top', '10px')
+        .style('right', '30px');
+
+    mapUi.html(`<div id='mapUi'>
+    <div class="form-group mr-3 mt-3" id="dropdown-tm">
+      <select class="form-control bg-primary text-white">
+        <option value="county_select" selected>Counties</option>
+        <option value="point_select">Points</option>
+      </select>
+    </div>
+    <div class="form-group mr-3 mt-3" id="dropdown-ui">
+      <select class="form-control bg-primary text-white">
+        <option value="air_pollution_data_Carb" selected>Carbon monoxide</option>
+        <option value="air_pollution_data_Lead">Lead</option>
+        <option value="air_pollution_data_Nitro">Nitrogren dioxide</option>
+        <option value="air_pollution_data_Ozo">Ozone</option>
+        <option value="air_pollution_data_Part">Particulate matter</option>
+        <option value="air_pollution_data_Sulf">Sulfur dioxide</option>
+      </select>
+    </div>
+  </div>`)
 
 
     countyMap();

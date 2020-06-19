@@ -113,20 +113,28 @@
             const path = d3.geoPath()
                 .projection(projection);
 
+            const states = svg.append('g')
+            .selectAll('path')
+            .data(stateData.features)
+            .join('path')
+            .attr('d', path)
+            .attr('fill', 'white')
+            .attr('stroke', 'black');
+
             const pollution = svg.append('g')
-                .selectAll('path')
-                .data(pollutionGeoJson.features)
-                .join('path')
-                .attr('d', path)
-                .attr("fill", d => {
-                    if ((d.properties[pollutant]) > 0) {
-                    return color(d.properties[pollutant]);
-                    }
-                    else {
-                        return 'white'
-                    }
-                })
-                .attr('stroke', 'black');
+            .selectAll('path')
+            .data(pollutionGeoJson.features)
+            .join('path')
+            .attr('d', path)
+            .attr("fill", d => {
+                if ((d.properties[pollutant]) > 0) {
+                return color(d.properties[pollutant]);
+                }
+                else {
+                    return 'transparent'
+                }
+            })
+            // .attr('stroke', 'black');
 
             const tooltip = d3.select('.container-fluid').append('div')
                 .attr('class', 'my-tooltip bg-warning text-white py-1 px-2 rounded position-absolute invisible');
@@ -153,8 +161,9 @@
     function pointMap() {
         const pollutionGeoJson = d3.csv('data/air_pollution_data.csv')
         const countyTopoJson = d3.json('data/counties.topojson')
+        const stateGeoJson = d3.json('data/states.geojson')
 
-        Promise.all([pollutionGeoJson, countyTopoJson]).then(getData);
+        Promise.all([pollutionGeoJson, countyTopoJson,stateGeoJson]).then(getData);
 
         function getData(data) {
 
@@ -170,6 +179,7 @@
 
             const pollutionData = data[0];
             const countyData = data[1];
+            const stateData = data[2];
 
             const geojson = topojson.feature(countyData, {
                 type: 'GeometryCollection',
@@ -221,12 +231,20 @@
             const path = d3.geoPath()
                 .projection(projection);
 
-            const counties = svg.append('g')
-                .selectAll('path')
-                .data(geojson.features)
-                .join('path')
-                .attr('d', path)
-                .attr('class', 'county');
+            // const counties = svg.append('g')
+            //     .selectAll('path')
+            //     .data(geojson.features)
+            //     .join('path')
+            //     .attr('d', path)
+            //     .attr('class', 'county');
+
+            const states = svg.append('g')
+            .selectAll('path')
+            .data(stateData.features)
+            .join('path')
+            .attr('d', path)
+            .attr('fill', 'white')
+            .attr('stroke', 'black');
 
             const pollution = svg.append('g')
                 .selectAll('circle')

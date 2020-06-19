@@ -24,7 +24,7 @@
         .style('top', 40)
         .style('left', 30);
 
-        countyMap();
+    countyMap();
 
     var choice = d3.select('#dropdown-tm select').on('change', function () {
         this.value
@@ -47,6 +47,10 @@
         }
     })
 
+    function scale(k) {
+        console.log(k)
+    }
+
     // Create zoom function
     const zoom = d3.zoom()
       // on zoom (many events fire this event like mousemove, wheel, dblclick, etc.)...
@@ -55,12 +59,17 @@
           // select all group items in svg
           .selectAll('g') 
           // transform path based on event 
-          .attr('transform', d3.event.transform);
+          .attr('transform', d3.event.transform)
+        scale(d3.event.transform.k)
       });
+
+    function scale(k) {
+        console.log(k)
+    }
 
     // Attach function to svg
     svg.call(zoom)
-
+    
     function countyMap() {
 
         const stateGeoJson = d3.json('data/states.geojson')
@@ -187,6 +196,9 @@
     }
 
     function pointMap() {
+
+        mapView = 'point'
+
         const pollutionGeoJson = d3.csv('data/air_pollution_data.csv')
         const countyTopoJson = d3.json('data/counties.topojson')
         const stateGeoJson = d3.json('data/states.geojson')

@@ -14,6 +14,7 @@
         .style('top', 40)
         .style('left', 30);
 
+
     const mapContainer = d3.select('#map')
 
     const svg = mapContainer
@@ -23,6 +24,7 @@
         .classed('position-absolute', true)
         .style('top', 40)
         .style('left', 30);
+
 
     countyMap();
 
@@ -53,6 +55,7 @@
 
     // Create zoom function
     const zoom = d3.zoom()
+      .scaleExtent([0.5,4])
       // on zoom (many events fire this event like mousemove, wheel, dblclick, etc.)...
       .on('zoom', () => {
         svg
@@ -69,6 +72,8 @@
 
     // Attach function to svg
     svg.call(zoom)
+
+
     
     function countyMap() {
 
@@ -79,6 +84,8 @@
         Promise.all([stateGeoJson, countyTopoJson, pollutionTopoJson]).then(getData);
 
         function getData(data) {
+
+            
 
             d3.select('#dropdown-ui select').on('change', function () {
                 svg.selectAll('*').remove()

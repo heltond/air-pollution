@@ -1,9 +1,20 @@
 (function () {
 
-    const mapContainer = d3.select('#map')
+    const legendContainer = d3.select('#map')
 
-    const width = mapContainer.node().offsetWidth - 60;
-    const height = mapContainer.node().offsetHeight - 60;
+    const width = legendContainer.node().offsetWidth - 60;
+    const height = legendContainer.node().offsetHeight - 60;
+
+
+    const svgLegend = legendContainer
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .classed('position-absolute', true)
+        .style('top', 40)
+        .style('left', 30);
+
+    const mapContainer = d3.select('#map')
 
     const svg = mapContainer
         .append('svg')
@@ -36,6 +47,20 @@
         }
     })
 
+    // Create zoom function
+    const zoom = d3.zoom()
+      // on zoom (many events fire this event like mousemove, wheel, dblclick, etc.)...
+      .on('zoom', () => {
+        svg
+          // select all group items in svg
+          .selectAll('g') 
+          // transform path based on event 
+          .attr('transform', d3.event.transform);
+      });
+
+    // Attach function to svg
+    svg.call(zoom)
+
     function countyMap() {
 
         const stateGeoJson = d3.json('data/states.geojson')
@@ -48,6 +73,7 @@
 
             d3.select('#dropdown-ui select').on('change', function () {
                 svg.selectAll('*').remove()
+                svgLegend.selectAll('*').remove()
                 drawMap(this.value, data)
             });
 
@@ -94,8 +120,8 @@
                 var measure = 'parts per billion'
             }
 
-            svg.append("g")
-                .attr("transform", "translate(0,50)")
+            svgLegend.append("g")
+                // .attr("transform", "translate(0,50)")
                 .append(() => legend({
                     color,
                     width: 260,
@@ -119,7 +145,8 @@
             .join('path')
             .attr('d', path)
             .attr('fill', 'white')
-            .attr('stroke', 'black');
+            .attr('stroke', 'black')
+            .attr('class', 'states');
 
             const pollution = svg.append('g')
             .selectAll('path')
@@ -134,6 +161,7 @@
                     return 'transparent'
                 }
             })
+            .attr('class', 'states'); // don't scale outlines
             // .attr('stroke', 'black');
 
             const tooltip = d3.select('.container-fluid').append('div')
@@ -169,6 +197,7 @@
 
             d3.select('#dropdown-ui select').on('change', function () {
                 svg.selectAll('*').remove()
+                svgLegend.selectAll('*').remove()
                 drawMap(this.value, data)
             });
 
@@ -212,8 +241,8 @@
                 var measure = 'parts per billion'
             }
 
-            svg.append("g")
-                .attr("transform", "translate(0,50)")
+            svgLegend.append("g")
+                // .attr("transform", "translate(0,50)")
                 .append(() => legend({
                     color,
                     width: 260,
@@ -244,7 +273,8 @@
             .join('path')
             .attr('d', path)
             .attr('fill', 'white')
-            .attr('stroke', 'black');
+            .attr('stroke', 'black')
+            .attr('class', 'states');
 
             const pollution = svg.append('g')
                 .selectAll('circle')
@@ -278,7 +308,8 @@
                     else {
                         return 'none';
                     }
-                });
+                })
+                .attr('class', 'points');
 
             const tooltip = d3.select('.container-fluid').append('div')
                 .attr('class', 'my-tooltip bg-warning text-white py-1 px-2 rounded position-absolute invisible');

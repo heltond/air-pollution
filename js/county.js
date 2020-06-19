@@ -188,7 +188,7 @@
                 }));
 
             const projection = d3.geoConicEquidistant()
-                .center([0, 40])
+                .center([0, 38])
                 .rotate([97, 0])
                 .scale(1300)
                 .translate([width / 2, height / 2]);

@@ -23,10 +23,10 @@
     }
 
     #attribution {
-      visibility: hidden;
+      /* visibility: hidden; */
     }
 
-    #dropdown-tm {
+    /* #dropdown-tm {
       position: fixed;
       top: 10vh;
       right: 62vh;
@@ -36,15 +36,41 @@
       position: fixed;
       top: 15vh;
       right: 62vh;
+    } */
+
+    .states {
+       /* Not standard CSS but works in most browsers! */
+       vector-effect: non-scaling-stroke;
     }
+
+    .points {
+       /* Not standard CSS but works in most browsers! */
+       vector-effect: non-scaling-stroke;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+      }
+
+    h2 {
+        font-size: 1.2rem;
+      }
 
     /* Small devices (landscape phones, 576px and up) */
     @media (min-width: 576px) {
-      #about {
+      /* #about {
         visibility: hidden;
-      }
+      } */
       #attribution {
         visibility: hidden;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      h2 {
+        font-size: 1.6rem;
       }
     }
 
@@ -53,13 +79,23 @@
       #map {
         height: 60vh;
       }
-      #about {
+      /* #about {
         visibility: hidden;
-      }
+      } */
       #attribution {
         visibility: visible;
       }
+
+      h1 {
+        font-size: 2.4rem;
+      }
+
+      h2 {
+        font-size: 2rem;
+      }
     }
+
+
 
     /* Large devices (desktops, 992px and up) */
     @media (min-width: 992px) {
@@ -67,12 +103,14 @@
       #map {
         height: 80vh;
       }
-      #about {
+      /* #about {
         visibility: hidden;
-      }
+      } */
       #attribution {
         visibility: visible;
       }
+
+      
     }
 
     /* Extra large devices (large desktops, 1200px and up) */
@@ -82,6 +120,14 @@
       }
       #attribution {
         visibility: visible;
+      }
+
+      h1 {
+        font-size: 2.8rem;
+      }
+
+      h2 {
+        font-size: 2.4rem;
       }
     }
 
@@ -118,35 +164,20 @@
   <div class="container-fluid">
     <header class="row py-3 bg-dark text-white">
       <div class="col mx-2">
-        <h2 class="h2">The Prevalence of the Six Major Kinds of Air Pollution in the U.S.</h1>
+        <h1>The Prevalence of the Six Major Kinds of Air Pollution in the U.S.</h1>
       </div>
     </header>
 
     <section class="row bg-secondary">
-      <div class="col-12 col-md-7 col-lg-8 px-0">
-        <div id="map" class="bg-light position-relative"></div>
-        <canvas id="legend" width=5 height=5></canvas>
-        <div class="form-group mr-3 mt-3" id="dropdown-tm">
-          <select class="form-control bg-primary text-white">
-            <option value="county_select" selected>Counties</option>
-            <option value="point_select">Points</option>
-          </select>
-        </div>
-        <div class="form-group mr-3 mt-3" id="dropdown-ui">
-          <select class="form-control bg-primary text-white">
-            <option value="air_pollution_data_Carb" selected>Carbon monoxide</option>
-            <option value="air_pollution_data_Lead">Lead</option>
-            <option value="air_pollution_data_Nitro">Nitrogren dioxide</option>
-            <option value="air_pollution_data_Ozo">Ozone</option>
-            <option value="air_pollution_data_Part">Particulate matter</option>
-            <option value="air_pollution_data_Sulf">Sulfur dioxide</option>
-          </select>
-        </div>
+      <div id="map" class="bg-light position-relative col-12 col-lg-8"></div>
+      <!-- <div class="col-12 col-md-7 col-lg-8 px-0">
+       
+        Where the dropdowns went
 
-      </div>
-      <aside id="about" class="col-12 col-md-5 col-lg-4 text-dark py-2">
+      </div> -->
+      <aside id="" class="col-12 col-lg-4 text-dark py-2">
         <section>
-          <h2 class="h2 text-dark">About this map</h2>
+          <h2 class="text-dark">About this map</h2>
           <p>
             The Environmental Protection Agency describes six common air pollutants as "criteria pollutants." These criteria pollutants are carbon monoxide, 
             lead, nitrogen dioxide, ozone, particulate matter, and sulfur dioxide. The EPA sets standards and regulations for these pollutants under the
@@ -181,6 +212,27 @@
       </div>
     </footer>
   </div>
+
+  
+  <!-- <canvas id="legend" width=5 height=5></canvas> -->
+<!-- <div id='mapUi'>
+  <div class="form-group mr-3 mt-3" id="dropdown-tm">
+    <select class="form-control bg-primary text-white">
+      <option value="county_select" selected>Counties</option>
+      <option value="point_select">Points</option>
+    </select>
+  </div>
+  <div class="form-group mr-3 mt-3" id="dropdown-ui">
+    <select class="form-control bg-primary text-white">
+      <option value="air_pollution_data_Carb" selected>Carbon monoxide</option>
+      <option value="air_pollution_data_Lead">Lead</option>
+      <option value="air_pollution_data_Nitro">Nitrogren dioxide</option>
+      <option value="air_pollution_data_Ozo">Ozone</option>
+      <option value="air_pollution_data_Part">Particulate matter</option>
+      <option value="air_pollution_data_Sulf">Sulfur dioxide</option>
+    </select>
+  </div>
+</div> -->
 
 
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

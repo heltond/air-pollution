@@ -1,19 +1,61 @@
 (function () {
 
-    const mapContainer = d3.select('#map')
+    const legendContainer = d3.select('#map')
 
-    const width = mapContainer.node().offsetWidth - 60;
-    const height = mapContainer.node().offsetHeight - 60;
+    const width = legendContainer.node().offsetWidth - 10;
+    const height = legendContainer.node().offsetHeight - 10;
+
+
+    const svgLegend = legendContainer
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .classed('position-absolute', true)
+        .style('top', '10px')
+        .style('left', '30px');
+
+
+    const mapContainer = d3.select('#map')
 
     const svg = mapContainer
         .append('svg')
         .attr('width', width)
         .attr('height', height)
         .classed('position-absolute', true)
-        .style('top', 40)
-        .style('left', 30);
+        .style('top', '5px')
+        .style('left', '5px');
 
-        countyMap();
+    const mapUiContainer = d3.select('#map')
+
+    const mapUi = mapUiContainer
+        .append('div')
+        .attr('width', width)
+        .attr('height', height)
+        .classed('position-absolute', true)
+        .style('top', '10px')
+        .style('right', '30px');
+
+    mapUi.html(`<div id='mapUi'>
+    <div class="form-group mr-3 mt-3" id="dropdown-tm">
+      <select class="form-control bg-primary text-white">
+        <option value="county_select" selected>Counties</option>
+        <option value="point_select">Points</option>
+      </select>
+    </div>
+    <div class="form-group mr-3 mt-3" id="dropdown-ui">
+      <select class="form-control bg-primary text-white">
+        <option value="air_pollution_data_Carb" selected>Carbon monoxide</option>
+        <option value="air_pollution_data_Lead">Lead</option>
+        <option value="air_pollution_data_Nitro">Nitrogren dioxide</option>
+        <option value="air_pollution_data_Ozo">Ozone</option>
+        <option value="air_pollution_data_Part">Particulate matter</option>
+        <option value="air_pollution_data_Sulf">Sulfur dioxide</option>
+      </select>
+    </div>
+  </div>`)
+
+
+    countyMap();
 
     var choice = d3.select('#dropdown-tm select').on('change', function () {
         this.value
@@ -36,6 +78,32 @@
         }
     })
 
+    function scale(k) {
+        console.log(k)
+    }
+
+    // Create zoom function
+    const zoom = d3.zoom()
+      .scaleExtent([0.5,4])
+      // on zoom (many events fire this event like mousemove, wheel, dblclick, etc.)...
+      .on('zoom', () => {
+        svg
+          // select all group items in svg
+          .selectAll('g') 
+          // transform path based on event 
+          .attr('transform', d3.event.transform)
+        scale(d3.event.transform.k)
+      });
+
+    function scale(k) {
+        console.log(k)
+    }
+
+    // Attach function to svg
+    svg.call(zoom)
+
+
+    
     function countyMap() {
 
         const stateGeoJson = d3.json('data/states.geojson')
@@ -44,10 +112,25 @@
 
         Promise.all([stateGeoJson, countyTopoJson, pollutionTopoJson]).then(getData);
 
+         // When the browser resizes...
+        //  window.addEventListener('resize', () => {
+
+        //     // remove existing SVG
+        //     svg.selectAll("*").remove();
+
+        //     // use promise to call all data files, then send data to callback
+        //     Promise.all([stateGeoJson, countyTopoJson, pollutionTopoJson])
+        //     .then(getData)
+        //     .catch(error => {
+        //         console.log(error)
+        //     });
+        // });
+
         function getData(data) {
 
             d3.select('#dropdown-ui select').on('change', function () {
                 svg.selectAll('*').remove()
+                svgLegend.selectAll('*').remove()
                 drawMap(this.value, data)
             });
 
@@ -94,8 +177,8 @@
                 var measure = 'parts per billion'
             }
 
-            svg.append("g")
-                .attr("transform", "translate(0,50)")
+            svgLegend.append("g")
+                // .attr("transform", "translate(0,50)")
                 .append(() => legend({
                     color,
                     width: 260,
@@ -105,7 +188,7 @@
                 }));
 
             const projection = d3.geoConicEquidistant()
-                .center([0, 40])
+                .center([0, 38])
                 .rotate([97, 0])
                 .scale(1300)
                 .translate([width / 2, height / 2]);
@@ -113,20 +196,30 @@
             const path = d3.geoPath()
                 .projection(projection);
 
+            const states = svg.append('g')
+            .selectAll('path')
+            .data(stateData.features)
+            .join('path')
+            .attr('d', path)
+            .attr('fill', 'white')
+            .attr('stroke', 'black')
+            .attr('class', 'states');
+
             const pollution = svg.append('g')
-                .selectAll('path')
-                .data(pollutionGeoJson.features)
-                .join('path')
-                .attr('d', path)
-                .attr("fill", d => {
-                    if ((d.properties[pollutant]) > 0) {
-                    return color(d.properties[pollutant]);
-                    }
-                    else {
-                        return 'white'
-                    }
-                })
-                .attr('stroke', 'black');
+            .selectAll('path')
+            .data(pollutionGeoJson.features)
+            .join('path')
+            .attr('d', path)
+            .attr("fill", d => {
+                if ((d.properties[pollutant]) > 0) {
+                return color(d.properties[pollutant]);
+                }
+                else {
+                    return 'transparent'
+                }
+            })
+            .attr('class', 'states'); // don't scale outlines
+            // .attr('stroke', 'black');
 
             const tooltip = d3.select('.container-fluid').append('div')
                 .attr('class', 'my-tooltip bg-warning text-white py-1 px-2 rounded position-absolute invisible');
@@ -151,15 +244,20 @@
     }
 
     function pointMap() {
+
+        mapView = 'point'
+
         const pollutionGeoJson = d3.csv('data/air_pollution_data.csv')
         const countyTopoJson = d3.json('data/counties.topojson')
+        const stateGeoJson = d3.json('data/states.geojson')
 
-        Promise.all([pollutionGeoJson, countyTopoJson]).then(getData);
+        Promise.all([pollutionGeoJson, countyTopoJson,stateGeoJson]).then(getData);
 
         function getData(data) {
 
             d3.select('#dropdown-ui select').on('change', function () {
                 svg.selectAll('*').remove()
+                svgLegend.selectAll('*').remove()
                 drawMap(this.value, data)
             });
 
@@ -170,6 +268,7 @@
 
             const pollutionData = data[0];
             const countyData = data[1];
+            const stateData = data[2];
 
             const geojson = topojson.feature(countyData, {
                 type: 'GeometryCollection',
@@ -202,8 +301,8 @@
                 var measure = 'parts per billion'
             }
 
-            svg.append("g")
-                .attr("transform", "translate(0,50)")
+            svgLegend.append("g")
+                // .attr("transform", "translate(0,50)")
                 .append(() => legend({
                     color,
                     width: 260,
@@ -221,12 +320,21 @@
             const path = d3.geoPath()
                 .projection(projection);
 
-            const counties = svg.append('g')
-                .selectAll('path')
-                .data(geojson.features)
-                .join('path')
-                .attr('d', path)
-                .attr('class', 'county');
+            // const counties = svg.append('g')
+            //     .selectAll('path')
+            //     .data(geojson.features)
+            //     .join('path')
+            //     .attr('d', path)
+            //     .attr('class', 'county');
+
+            const states = svg.append('g')
+            .selectAll('path')
+            .data(stateData.features)
+            .join('path')
+            .attr('d', path)
+            .attr('fill', 'white')
+            .attr('stroke', 'black')
+            .attr('class', 'states');
 
             const pollution = svg.append('g')
                 .selectAll('circle')
@@ -260,7 +368,8 @@
                     else {
                         return 'none';
                     }
-                });
+                })
+                .attr('class', 'points');
 
             const tooltip = d3.select('.container-fluid').append('div')
                 .attr('class', 'my-tooltip bg-warning text-white py-1 px-2 rounded position-absolute invisible');

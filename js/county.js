@@ -5,7 +5,6 @@
     const width = legendContainer.node().offsetWidth - 10;
     const height = legendContainer.node().offsetHeight - 10;
 
-
     const svgLegend = legendContainer
         .append('svg')
         .attr('width', width)
@@ -13,7 +12,6 @@
         .classed('position-absolute', true)
         .style('top', '10px')
         .style('left', '30px');
-
 
     const mapContainer = d3.select('#map')
 
@@ -35,7 +33,8 @@
         .style('top', '10px')
         .style('right', '30px');
 
-    mapUi.html(`<div id='mapUi'>
+    function drawLegend() {
+        mapUi.html(`<div id='mapUi'>
     <div class="form-group mr-3 mt-3" id="dropdown-tm">
       <select class="form-control bg-primary text-white">
         <option value="county_select" selected>Counties</option>
@@ -53,7 +52,9 @@
       </select>
     </div>
   </div>`)
+    }
 
+    drawLegend();
 
     countyMap();
 
@@ -64,17 +65,20 @@
         if (selection == 'county_select') {
             svg.selectAll('*').remove()
             countyMap()
-            selection = '';
+            selection = ''
+            drawLegend();
         }
         else if (selection == 'point_select') {
             svg.selectAll('*').remove()
             pointMap()
-            selection = '';
+            selection = ''
+            drawLegend();
         }
         else {
             svg.selectAll('*').remove()
             countyMap()
-            selection = '';
+            selection = ''
+            drawLegend();
         }
     })
 
@@ -84,16 +88,16 @@
 
     // Create zoom function
     const zoom = d3.zoom()
-      .scaleExtent([0.5,4])
-      // on zoom (many events fire this event like mousemove, wheel, dblclick, etc.)...
-      .on('zoom', () => {
-        svg
-          // select all group items in svg
-          .selectAll('g') 
-          // transform path based on event 
-          .attr('transform', d3.event.transform)
-        scale(d3.event.transform.k)
-      });
+        .scaleExtent([0.5, 4])
+        // on zoom (many events fire this event like mousemove, wheel, dblclick, etc.)...
+        .on('zoom', () => {
+            svg
+                // select all group items in svg
+                .selectAll('g')
+                // transform path based on event 
+                .attr('transform', d3.event.transform)
+            scale(d3.event.transform.k)
+        });
 
     function scale(k) {
         console.log(k)
@@ -102,8 +106,6 @@
     // Attach function to svg
     svg.call(zoom)
 
-
-    
     function countyMap() {
 
         const stateGeoJson = d3.json('data/states.geojson')
@@ -112,30 +114,39 @@
 
         Promise.all([stateGeoJson, countyTopoJson, pollutionTopoJson]).then(getData);
 
-         // When the browser resizes...
-        //  window.addEventListener('resize', () => {
-
-        //     // remove existing SVG
-        //     svg.selectAll("*").remove();
-
-        //     // use promise to call all data files, then send data to callback
-        //     Promise.all([stateGeoJson, countyTopoJson, pollutionTopoJson])
-        //     .then(getData)
-        //     .catch(error => {
-        //         console.log(error)
-        //     });
-        // });
+        var retain = '';
 
         function getData(data) {
 
-            d3.select('#dropdown-ui select').on('change', function () {
-                svg.selectAll('*').remove()
-                svgLegend.selectAll('*').remove()
+            if (retain == '') {
+
+                d3.select('#dropdown-ui select').on('change', function () {
+                    svg.selectAll('*').remove()
+                    svgLegend.selectAll('*').remove()
+                    drawMap(this.value, data)
+                });
+
+            }
+
+            else {
                 drawMap(this.value, data)
-            });
+            }
 
             drawMap('air_pollution_data_Carb', data)
         }
+
+        window.addEventListener('resize', () => {
+            var retain = this.value;
+            getData(retain, data)
+
+            svg.selectAll("*").remove();
+
+            Promise.all([stateGeoJson, countyTopoJson, pollutionTopoJson])
+                .then(getData)
+                .catch(error => {
+                    console.log(error)
+                });
+        });
 
         function drawMap(pollutant, data) {
 
@@ -156,7 +167,7 @@
             const myArray = []
             for (let x of pollutionGeoJson.features) {
                 if (x.properties[pollutant] > 0) {
-                myArray.push(+x.properties[pollutant])
+                    myArray.push(+x.properties[pollutant])
                 }
             }
 
@@ -197,28 +208,28 @@
                 .projection(projection);
 
             const states = svg.append('g')
-            .selectAll('path')
-            .data(stateData.features)
-            .join('path')
-            .attr('d', path)
-            .attr('fill', 'white')
-            .attr('stroke', 'black')
-            .attr('class', 'states');
+                .selectAll('path')
+                .data(stateData.features)
+                .join('path')
+                .attr('d', path)
+                .attr('fill', 'white')
+                .attr('stroke', 'black')
+                .attr('class', 'states');
 
             const pollution = svg.append('g')
-            .selectAll('path')
-            .data(pollutionGeoJson.features)
-            .join('path')
-            .attr('d', path)
-            .attr("fill", d => {
-                if ((d.properties[pollutant]) > 0) {
-                return color(d.properties[pollutant]);
-                }
-                else {
-                    return 'transparent'
-                }
-            })
-            .attr('class', 'states'); // don't scale outlines
+                .selectAll('path')
+                .data(pollutionGeoJson.features)
+                .join('path')
+                .attr('d', path)
+                .attr("fill", d => {
+                    if ((d.properties[pollutant]) > 0) {
+                        return color(d.properties[pollutant]);
+                    }
+                    else {
+                        return 'transparent'
+                    }
+                })
+                .attr('class', 'states'); // don't scale outlines
             // .attr('stroke', 'black');
 
             const tooltip = d3.select('.container-fluid').append('div')
@@ -233,7 +244,7 @@
             pollution.on('mousemove', (d, i, nodes) => {
                 d3.select(nodes[i]).classed('hover', true).raise();
                 if (d.properties[pollutant] > 0) {
-                tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties[pollutant]} ${measure}`)
+                    tooltip.classed('invisible', false).html(`${d.properties.NAME} County<br>${d.properties[pollutant]} ${measure}`)
                 }
             })
                 .on('mouseout', (d, i, nodes) => {
@@ -251,18 +262,40 @@
         const countyTopoJson = d3.json('data/counties.topojson')
         const stateGeoJson = d3.json('data/states.geojson')
 
-        Promise.all([pollutionGeoJson, countyTopoJson,stateGeoJson]).then(getData);
+        Promise.all([pollutionGeoJson, countyTopoJson, stateGeoJson]).then(getData);
+
+        var retain = '';
 
         function getData(data) {
 
-            d3.select('#dropdown-ui select').on('change', function () {
-                svg.selectAll('*').remove()
-                svgLegend.selectAll('*').remove()
+            if (retain == '') {
+
+                d3.select('#dropdown-ui select').on('change', function () {
+                    svg.selectAll('*').remove()
+                    svgLegend.selectAll('*').remove()
+                    drawMap(this.value, data)
+                });
+            }
+
+            else {
                 drawMap(this.value, data)
-            });
+            }
 
             drawMap('air_pollution_data_Carb', data)
         }
+
+        window.addEventListener('resize', () => {
+            var retain = this.value;
+            getData(retain, data)
+
+            svg.selectAll("*").remove();
+
+            Promise.all([pollutionGeoJson, countyTopoJson, stateGeoJson])
+                .then(getData)
+                .catch(error => {
+                    console.log(error)
+                });
+        });
 
         function drawMap(pollutant, data) {
 
@@ -278,7 +311,7 @@
             const myArray = []
             for (let x of pollutionData) {
                 if (x[pollutant] > 0) {
-                myArray.push(+x[pollutant])
+                    myArray.push(+x[pollutant])
                 }
             }
 
@@ -328,13 +361,13 @@
             //     .attr('class', 'county');
 
             const states = svg.append('g')
-            .selectAll('path')
-            .data(stateData.features)
-            .join('path')
-            .attr('d', path)
-            .attr('fill', 'white')
-            .attr('stroke', 'black')
-            .attr('class', 'states');
+                .selectAll('path')
+                .data(stateData.features)
+                .join('path')
+                .attr('d', path)
+                .attr('fill', 'white')
+                .attr('stroke', 'black')
+                .attr('class', 'states');
 
             const pollution = svg.append('g')
                 .selectAll('circle')
